@@ -1,0 +1,10 @@
+'use client';
+
+import createCache from '@emotion/cache';
+
+export default function createEmotionCache() {
+  return createCache({
+    key: 'mui',
+    prepend: true, // ensures MUI styles load first
+  });
+}

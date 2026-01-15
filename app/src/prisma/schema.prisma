@@ -1,0 +1,72 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Document {
+  id            Int     @id @default(autoincrement())
+  fileName      String
+  type          String
+  storagePath   String
+  status        String
+  subject       String?
+  storeIn       String?
+  processed     Boolean    @default(false)
+  reportDate    DateTime?  @db.Date
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+
+  patientId     Int?
+  patient       Patient?   @relation(fields: [patientId], references: [id])
+
+  userId        Int?
+  user          User?      @relation(fields: [userId], references: [id])
+
+  specialistId  Int?
+  specialist    Specialist? @relation(fields: [specialistId], references: [id])
+
+  categoryId    Int?
+  category      Category?  @relation(fields: [categoryId], references: [id])
+}
+
+model Patient {
+  id         Int     @id @default(autoincrement())
+  firstName  String
+  lastName   String
+  wholeName  String?
+  DOB        DateTime?  @db.Date
+  stringDOB String?
+  mobile     String?
+  address    String?
+  suburb     String?
+  postcode   String?
+
+  documents  Document[]
+}
+
+model Category {
+  id        Int     @id @default(autoincrement())
+  category  String
+
+  documents Document[]
+}
+
+model User {
+  id        Int     @id @default(autoincrement())
+  name      String
+
+  documents Document[]
+}
+
+model Specialist {
+  id        Int     @id @default(autoincrement())
+  name      String
+  practice  String
+  position  String?
+
+  documents Document[]
+}
+
